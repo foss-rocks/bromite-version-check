@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bromite version check</title>
+</head>
+<body onload="ua()">
+<p id="bromite"></p>
+<p id="version"></p>
+<script>
+    function ua() {
+        let list = /ONEPLUS A6000|FIG-LX3|SM-G610M|SM-J700M|XT1033|ZTE Blade C370|SM-G960F/;
+        let nav = list.exec(navigator.userAgent);
+
+        if (nav) {
+            let script = document.createElement("script");
+            script.src = "ads.js.";
+            document.head.append(script);
+
+            script.onload = script.onerror = function () { // onerror required for some versions <= 72.0.3626.73
+                if (!document.getElementById('ads')) {
+                    document.getElementById("bromite").innerText = "yes";
+                    check(0);
+                } else {
+                    document.getElementById("bromite").innerText = "no";
+                }
+            };
+        } else {
+            document.getElementById("bromite").innerText = "no";
+        }
+    }
+
+
+    const dict = [
+        {"ver": "76.0.3809.115", "src": "srganalytics."},
+        {"ver": "76.0.3809.100", "src": ".d-engine.js"},
+        {"ver": "76.0.3809.91", "src": "pixel_tracking?"},
+        {"ver": "76.0.3809.85", "src": "banger.js"},
+        {"ver": "73.0.3683.97", "src": "matomo.js"},
+        {"ver": "73.0.3683.88", "src": "sns-twi-"},
+        {"ver": "73.0.3683.82", "src": "-share-whatsapp."},
+        {"ver": "73.0.3683.79", "src": "a_marquage_xiti."},
+        {"ver": "73.0.3683.70", "src": "logger.screensize?"},
+        {"ver": "73.0.3683.61", "src": "logger.screensize?"},
+        {"ver": "72.0.3626.120", "src": "sharebutton?"},
+        {"ver": "72.0.3626.119", "src": "fb-traffic-pop.js"},
+        {"ver": "72.0.3626.114", "src": "track-boosters-event."},
+        {"ver": "72.0.3626.108", "src": "web2_ad."},
+        {"ver": "72.0.3626.99", "src": "wwwcount.cgi?"},
+        {"ver": "72.0.3626.87", "src": "goads"},
+        {"ver": "72.0.3626.81", "src": "pixel.ashx?"},
+        {"ver": "72.0.3626.73", "src": "moose-track."},
+        {"ver": "72.0.3626.68", "src": "fb-pixel-"},
+        {"ver": "71.0.3578.132", "src": "faciliti-tag."},
+        {"ver": "71.0.3578.120/.123", "src": "utm_cookie."},
+        {"ver": "71.0.3578.115", "src": "stats_video_"},
+        {"ver": "71.0.3578.110", "src": "gadv-right."},
+        {"ver": "71.0.3578.104", "src": "nx_stat."},
+        {"ver": "71.0.3578.101", "src": "bms-analytics."},
+    ];
+    const len = dict.length - 1;
+
+    function check(index) {
+        let script = document.createElement("script");
+        script.src = "src/" + dict[index].src;
+        script.type = "text/javascript";
+        document.head.append(script);
+
+        script.onload = script.onerror = function () { // onerror required for some versions <= 72.0.3626.73
+            if (!document.getElementsByTagName("div")[index]) {
+                document.getElementById("version").innerText = dict[index].ver;
+            } else if (index < len) {
+                check(++index);
+            }
+        };
+    }
+</script>
+</body>
+</html>
